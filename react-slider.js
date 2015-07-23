@@ -70,6 +70,13 @@
       step: React.PropTypes.number,
 
       /**
+       * Values to be used as the steps between min and max
+       * Will override the use of `step`
+       * The first value should be `min`, the last value should be `max`
+       */
+      steps: React.PropTypes.array,
+
+      /**
        * The minimal distance between any pair of handles.
        * Must be positive, but zero means they can sit on top of each other.
        */
@@ -633,11 +640,36 @@
     _alignValue: function (val, props) {
       props = props || this.props;
 
-      var valModStep = (val - props.min) % props.step;
-      var alignValue = val - valModStep;
+      var alignValue = 0;
 
-      if (Math.abs(valModStep) * 2 >= props.step) {
-        alignValue += (valModStep > 0) ? props.step : (-props.step);
+      if (props.steps) {
+        props.steps.sort(function(a, b) { return a - b; });
+
+        var i = 0;
+        var length = props.steps.length;
+        var diff = -1;
+        var newDiff = -1;
+
+        // find the closest step value in array
+        for (; i < length; i += 1) {
+          newDiff = Math.abs(val - props.steps[i]);
+
+          if (newDiff < diff || diff === -1) {
+            diff = newDiff;
+            alignValue = props.steps[i];
+          // if diff is getting bigger, the loop is past relevant values, break
+          } else if (newDiff >= diff) {
+            break;
+          }
+        }
+      } else {
+        var valModStep = (val - props.min) % props.step;
+
+        alignValue = val - valModStep;
+
+        if (Math.abs(valModStep) * 2 >= props.step) {
+          alignValue += (valModStep > 0) ? props.step : (-props.step);
+        }
       }
 
       return parseFloat(alignValue.toFixed(5));
