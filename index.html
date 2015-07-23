@@ -92,6 +92,7 @@
 <div id="horizontal-1"></div>
 <div id="horizontal-2"></div>
 <div id="horizontal-3"></div>
+<div id="horizontal-4"></div>
 <div id="vertical"></div>
 
 <script>
@@ -107,7 +108,7 @@
         displayName: 'Demo',
 
         getInitialState: function () {
-            return {value: this.props.defaultValue}
+            return {value: this.props.defaultValue};
         },
 
         onChange: function (value) {
@@ -143,6 +144,14 @@
         orientation: 'horizontal',
         withBars: true
     }), document.getElementById('horizontal-3'));
+
+    React.render(Demo({
+        defaultValue: 0,
+        orientation: 'horizontal',
+        min: 0,
+        max: 64,
+        steps: [0, 1, 2, 4, 8, 16, 32, 64]
+    }), document.getElementById('horizontal-4'));
 
     React.render(Demo({
         defaultValue: [0, 50, 100],
