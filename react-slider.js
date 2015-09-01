@@ -231,9 +231,24 @@
       // ensure the array keeps the same size as `value`
       this.tempArray = value.slice();
 
+      var valueArray = this.state.value.slice();
+      var newValue = null;
+      var changeEvent = false;
       for (var i = 0; i < value.length; i++) {
-        this.state.value[i] = this._trimAlignValue(value[i], newProps);
+        newValue = this._trimAlignValue(value[i], newProps);
+
+        if (valueArray[i] !== newValue) {
+          valueArray[i] = newValue;
+          changeEvent = true;
+        }
       }
+
+      this.setState({ value: valueArray }, function() {
+        if (changeEvent) {
+          this._fireChangeEvent('onChange');
+        }
+      });
+
       if (this.state.value.length > value.length)
         this.state.value.length = value.length;
 
