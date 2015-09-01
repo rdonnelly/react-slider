@@ -186,6 +186,7 @@
         min: 0,
         max: 100,
         step: 1,
+        steps: [],
         minDistance: 0,
         defaultValue: 0,
         orientation: 'horizontal',
